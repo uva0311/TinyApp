@@ -2,7 +2,19 @@
 <html lang="en">
     <% include partials/_header %>
 <body>
-    <!-- Add your EJS code here -->
-    <% include urls_show %>
+    <% include urls_new  %>
+    <% for(let i = 0; i < Object.keys(urls).length; i++) {%>
+    <form method="POST" action="/urls/<%= Object.keys(urls)[i] %>/delete"><ul>
+        <li>
+            <p>
+               <a href='/urls/<%= Object.keys(urls)[i] %>'>
+               <%= Object.keys(urls)[i] %></a>
+               ----> <%= Object.values(urls)[i] %>
+               <input type='hidden' name='deletedUrl'>
+               <input type="submit" value="Delete">
+            </p>
+        </li>
+    </ul></form>
+    <% }; %>
 </body>
 </html>
