@@ -61,13 +61,14 @@ app.post("/register", (req, res) => {
   }
 });
 
+// *** need to create urls_login ejs to render
 app.post("/login", (req, res) =>{
-  res.cookie("username", req.body.username);
+  res.cookie("user_id", req.body.user_id);
   res.redirect("/urls");
 });
 
 app.post("/logout", (req, res) =>{
-  res.clearCookie("username", req.params.username);
+  res.clearCookie("user_id", req.params.user_id);
   res.redirect("/urls");
 });
 
@@ -78,7 +79,8 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = {
       urls: urlDatabase,
-      username: req.cookies["username"]
+      user_id: req.cookies["user_id"]
+      // user: req.cookies["username"].  old version
   };
   res.render("urls_index", templateVars);
 });
