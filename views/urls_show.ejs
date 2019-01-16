@@ -1,0 +1,11 @@
+<ul>
+    <% for(let i = 0; i < Object.keys(urls).length; i++) {%>
+    <li>
+        <p>Original link: <%= Object.values(urls)[i] %></p>
+        <p>Shortened link:
+            <a href='/urls/<%= Object.keys(urls)[i] %>'>
+            <%= Object.keys(urls)[i] %></a>
+        </p>
+    </li>
+    <% }; %>
+</ul>
