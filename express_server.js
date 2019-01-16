@@ -43,14 +43,22 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const id = generateRandomString();
-  users[id] = {
-    id: id,
-    email: req.body.email,
-    password: req.body.password
-  };
-  res.cookie("user_id", id);
-  res.redirect("/urls");
+  if(!(req.body.email.length) || !(req.body.password.length)){
+    res.status(400);
+    res.send('invalid email address or password.');
+  } else if(Object.values(users).find((user) => user.email === req.body.email? true : false)) {
+    res.status(400);
+    res.send('email address is already registered.');
+  } else {
+    const id = generateRandomString();
+    users[id] = {
+      id: id,
+      email: req.body.email,
+      password: req.body.password
+    };
+    res.cookie("user_id", id);
+    res.redirect("/urls");
+  }
 });
 
 app.post("/login", (req, res) =>{
