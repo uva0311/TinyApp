@@ -2,8 +2,10 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser');
 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 app.set("view engine", "ejs");
 
@@ -24,12 +26,25 @@ function generateRandomString() {
   return randomString;
 }
 
+app.post("/login", (req, res) =>{
+  res.cookie("username", req.body.username);
+  res.redirect("/urls");
+});
+
+app.post("/logout", (req, res) =>{
+  res.clearCookie("username", req.params.username);
+  res.redirect("/urls");
+});
+
 app.get("/", (req, res) => {
   res.send("hello!");
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
+  let templateVars = {
+      urls: urlDatabase,
+      username: req.cookies["username"]
+  };
   res.render("urls_index", templateVars);
 });
 
