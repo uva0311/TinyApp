@@ -35,7 +35,6 @@ app.get("/urls", (req, res) => {
 
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
-
   urlDatabase[shortURL] = req.body.longURL;
   console.log(urlDatabase);
   res.send(`<html><a href="http://localhost:8080/u/${shortURL}">http://localhost:8080/u/${shortURL}</a></html>`);
@@ -45,13 +44,13 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-app.get("/u/:shortURL", (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL] ;
+app.get("/u/:id", (req, res) => {
+  const longURL = urlDatabase[req.params.id];
   res.redirect(longURL);
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id };
+  let templateVars = {shortURL: req.params.id}
   res.render("urls_show", templateVars);
 });
 
