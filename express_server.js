@@ -43,9 +43,13 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  // **** should pass register info. back to users object
-  //   email: req.cookies["email"],
-  //   password: req.cookies["password"]
+  const id = generateRandomString();
+  users[id] = {
+    id: id,
+    email: req.body.email,
+    password: req.body.password
+  };
+  res.cookie("user_id", id);
   res.redirect("/urls");
 });
 
