@@ -106,7 +106,7 @@ app.get("/urls", (req, res) => {
 
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
-  urlDatabase[req.cookies["user_id"]][shortURL] = req.body.longURL;
+  urlDatabase[req.cookies["user_id"]] = req.body.longURL;
   res.send(`<html><a href="http://localhost:8080/u/${shortURL}">http://localhost:8080/u/${shortURL}</a></html>`);
 });
 
@@ -123,7 +123,7 @@ app.get("/u/:id", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = {shortURL: req.params.id}
+  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.cookies["user_id"]][req.params.id]};
   res.render("urls_show", templateVars);
 });
 

@@ -8,12 +8,10 @@
       <% include urls_new  %>
       <% for(let i = 0; i < Object.keys(urls[user_id]).length; i++){ %>
         <ul>
-            <p style="display: inline; margin-right: 20px;">
+            <p style="display: inline;">
                <%= Object.keys(urls[user_id])[i] %>
                ----> <%= Object.values(urls[user_id])[i] %>
-               <form method="POST" style="display: inline;" action="/urls/<%= Object.keys(urls[user_id])[i] %>">
-                  <input type="submit" value="Update">
-               </form>
+               <button style="display: inline;" onclick="window.location.href = '/urls/<%= Object.keys(urls[user_id])[i] %>';">Update</button>
                <form method="POST" style="display: inline;" action="/urls/<%= Object.keys(urls[user_id])[i] %>/delete">
                   <input type="submit" value="Delete">
                </form>
