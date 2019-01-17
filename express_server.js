@@ -10,8 +10,14 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "userRandomID": {
+    longURL: "http://www.lighthouselabs.ca",
+    shortURL: "b2xVn2"
+  },
+  "user2RandomID": {
+    longURL: "http://www.google.com",
+    shortURL: "9sm5xK"
+  }
 };
 
 const users = {

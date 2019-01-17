@@ -6,15 +6,17 @@
 <body>
     <% if(user_id){ %>
       <% include urls_new  %>
-      <% for(let i = 0; i < Object.keys(urls).length; i++) {%>
-        <form method="POST" action="/urls/<%= Object.keys(urls)[i] %>/delete"><ul>
+      <% for(let i = 0; i < Object.keys(urls).length; i++){ %>
+        <% if(Object.keys(urls)[i] === user_id){ %>
+        <form method="POST" action="/urls/<%= Object.values(urls)[i]['shortURL'] %>/delete"><ul>
             <p>
-               <a href='/urls/<%= Object.keys(urls)[i] %>'>
-               <%= Object.keys(urls)[i] %></a>
-               ----> <%= Object.values(urls)[i] %>
+               <a href='/urls/<%= Object.values(urls)[i]["shortURL"] %>'>
+               <%= Object.values(urls)[i]["shortURL"] %></a>
+               ----> <%= Object.values(urls)[i]["longURL"] %>
                <input type="submit" value="Delete">
             </p>
         </ul></form>
+        <% } %>
       <% }; %>
     <% } %>
 </body>
