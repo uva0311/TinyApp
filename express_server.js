@@ -44,11 +44,9 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   if(!(req.body.email.length) || !(req.body.password.length)){
-    res.status(400);
-    res.send('invalid email address or password.');
+    res.status(400).send('invalid email address or password.');
   } else if(Object.values(users).find((user) => user.email === req.body.email? true : false)) {
-    res.status(400);
-    res.send('email address is already registered.');
+    res.status(400).send('email address is already registered.');
   } else {
     const id = generateRandomString();
     users[id] = {
@@ -67,18 +65,21 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) =>{
   if(!(req.body.email.length) || !(req.body.password.length)){
-    res.status(403);
-    res.send('Please enter login information to login.');
+    res.status(403).send('Please enter login information to login.');
   } else if(!Object.values(users).find((user) => user.email === req.body.email? true : false)) {
-    res.status(403);
-    res.send('email address is not registered yet.')
+    res.status(403).send('email address is not registered yet.');
   } else if(!Object.values(users).find((user) => user.password === req.body.password? true : false)){
-    res.status(403);
-    res.send('password does not match.')
+    res.status(403).res.send('password does not match.');
   } else {
-    // do sth that will register the user_id to cookie
-    res.cookie("user_id", req.body.user_id);
-    res.redirect("/urls");
+
+    let user = "";
+    for(let i = 0; i < Object.values(users).length; i++){
+      if(Object.values(users)[i].email === req.body.email){
+         user_id = Object.values(users)[i].id;
+         res.cookie("user_id", user_id);
+         res.redirect("/urls");
+      }
+    }
   }
 });
 
