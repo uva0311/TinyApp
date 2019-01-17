@@ -9,7 +9,7 @@
       <% for(let i = 0; i < Object.keys(urls[user_id]).length; i++){ %>
         <ul>
             <p style="display: inline;">
-               <%= Object.keys(urls[user_id])[i] %>
+               <a href="http://localhost:8080/u/<%= Object.keys(urls[user_id])[i] %>">http://localhost:8080/u/<%= Object.keys(urls[user_id])[i] %></a>
                ----> <%= Object.values(urls[user_id])[i] %>
                <button style="display: inline;" onclick="window.location.href = '/urls/<%= Object.keys(urls[user_id])[i] %>';">Update</button>
                <form method="POST" style="display: inline;" action="/urls/<%= Object.keys(urls[user_id])[i] %>/delete">
