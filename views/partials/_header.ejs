@@ -2,8 +2,7 @@
   <title>TinyApp</title>
 </head>
 <% if(!user_id){ %>
-  <form action="/login" method="POST" style="display: inline;">
-    <input id="user_id" type="text" name="user_id" placeholder="username" style="width: 100px">
+  <form action="/login" method="GET" style="display: inline;">
     <input type="submit" value="login">
   </form>
   <form action="/register" method="GET" style="display: inline;">

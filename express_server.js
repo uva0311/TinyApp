@@ -61,10 +61,25 @@ app.post("/register", (req, res) => {
   }
 });
 
-// *** need to create urls_login ejs to render
+app.get("/login", (req, res) => {
+  res.render("urls_login");
+});
+
 app.post("/login", (req, res) =>{
-  res.cookie("user_id", req.body.user_id);
-  res.redirect("/urls");
+  if(!(req.body.email.length) || !(req.body.password.length)){
+    res.status(403);
+    res.send('Please enter login information to login.');
+  } else if(!Object.values(users).find((user) => user.email === req.body.email? true : false)) {
+    res.status(403);
+    res.send('email address is not registered yet.')
+  } else if(!Object.values(users).find((user) => user.password === req.body.password? true : false)){
+    res.status(403);
+    res.send('password does not match.')
+  } else {
+    // do sth that will register the user_id to cookie
+    res.cookie("user_id", req.body.user_id);
+    res.redirect("/urls");
+  }
 });
 
 app.post("/logout", (req, res) =>{
@@ -80,7 +95,6 @@ app.get("/urls", (req, res) => {
   let templateVars = {
       urls: urlDatabase,
       user_id: req.cookies["user_id"]
-      // user: req.cookies["username"].  old version
   };
   res.render("urls_index", templateVars);
 });
