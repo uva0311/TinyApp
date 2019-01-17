@@ -107,6 +107,9 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
+  if(!req.cookies["user_id"]){
+    res.redirect("/urls");
+  }
   res.render("urls_new");
 });
 
