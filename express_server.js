@@ -69,7 +69,7 @@ app.post("/login", (req, res) =>{
   } else if(!Object.values(users).find((user) => user.email === req.body.email? true : false)) {
     res.status(403).send('email address is not registered yet.');
   } else if(!Object.values(users).find((user) => user.password === req.body.password? true : false)){
-    res.status(403).res.send('password does not match.');
+    res.status(403).send('password does not match.');
   } else {
 
     let user = "";
