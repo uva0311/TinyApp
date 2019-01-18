@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <h1>Welcome to TinyApp</h1>
-    <h2>We promise to make your url shorter</h2>
+    <h2>Please login/register to start use this service!</h2>
     <div><% include partials/_header %></div>
 <body>
     <% if(user_id){ %>
@@ -18,6 +18,8 @@
             </p>
         </ul>
       <% } %>
+    <% } else { %>
+        <p>Here is some examples of the shortened URLs made by TinyApp:</p>
     <% } %>
 </body>
 </html>

@@ -106,7 +106,7 @@ app.get("/urls", (req, res) => {
 
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
-  urlDatabase[req.cookies["user_id"]] = req.body.longURL;
+  urlDatabase[req.cookies["user_id"]][shortURL] = req.body.longURL;
   res.send(`<html><a href="http://localhost:8080/u/${shortURL}">http://localhost:8080/u/${shortURL}</a></html>`);
 });
 
