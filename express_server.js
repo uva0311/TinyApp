@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const express = require("express");
+const methodOverride = require('method-override');
 const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
@@ -11,6 +12,7 @@ const hash = (plaintext) => {
   return bcrypt.hashSync(plaintext, salt);
 };
 
+app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   secret: process.env.secret_keys
@@ -151,7 +153,7 @@ app.post("/urls/:id", (req, res) => {
   res.redirect("/urls");
 })
 
-app.post("/urls/:id/delete", (req, res) => {
+app.delete("/urls/:id", (req, res) => {
   const deletedUrl = req.params.id;
   delete urlDatabase[req.session.user_id][deletedUrl];
   res.redirect("/urls");
