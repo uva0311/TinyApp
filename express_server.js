@@ -82,12 +82,12 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) =>{
   password = req.body.password;
   if(!(req.body.email.length) || !(req.body.password.length)){
-    res.status(403).send('Please enter login information to login.');
+    res.status(403).send("Please enter login information to login.");
   } else {
     for(let i = 0; i < Object.values(users).length; i++){
       if(Object.values(users)[i].email === req.body.email){
         if(!bcrypt.compareSync(req.body.password, Object.values(users)[i].password)){
-            res.status(403).send('password does not match.');
+            res.status(403).send("password does not match.");
             return;
         } else {
             user_id = Object.values(users)[i].id;
@@ -97,12 +97,11 @@ app.post("/login", (req, res) =>{
         }
       }
     }
-    res.status(403).send('email address is not registered yet.');
+    res.status(403).send("email address is not registered yet.");
   }
 });
 
 app.post("/logout", (req, res) =>{
-  // res.clearCookie("user_id", req.params.user_id);
   req.session = null;
   res.redirect("/urls");
 });
@@ -123,9 +122,13 @@ app.get("/urls", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  const shortURL = generateRandomString();
-  urlDatabase[req.session.user_id][shortURL] = req.body.longURL;
-  res.send(`<html><a href="http://localhost:8080/u/${shortURL}">http://localhost:8080/u/${shortURL}</a></html>`);
+  if(!req.session.user_id){
+    res.status(403).send("Only registered user can visit this page.");
+  } else {
+    const shortURL = generateRandomString();
+    urlDatabase[req.session.user_id][shortURL] = req.body.longURL;
+    res.send(`<html><a href="http://localhost:8080/u/${shortURL}">http://localhost:8080/u/${shortURL}</a></html>`);
+  }
 });
 
 app.get("/urls/new", (req, res) => {
@@ -137,18 +140,25 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/u/:id", (req, res) => {
   let longURL = "";
-
   for (let user in urlDatabase) {
     if (req.params.id in urlDatabase[user]) {
       longURL = urlDatabase[user][req.params.id];
       res.redirect(longURL);
+    } else {
+      res.status(404).send('Short URL does not exist');
     }
   }
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.session.user_id][req.params.id]};
-  res.render("urls_show", templateVars);
+  if(!req.session.user_id){
+    res.status(403).send("Only registered user can visit this page.");
+  } else if(urlDatabase[req.session.user_id][req.params.id] !== req.params.id){
+    res.status(403).send("This link belongs to another user.");
+  } else {
+    let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.session.user_id][req.params.id]};
+    res.render("urls_show", templateVars);
+  }
 });
 
 app.post("/urls/:id", (req, res) => {
