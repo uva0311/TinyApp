@@ -118,8 +118,14 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/u/:id", (req, res) => {
-  const longURL = urlDatabase[req.cookies["user_id"]][req.params.id];
-  res.redirect(longURL);
+  let longURL = "";
+
+  for (let user in urlDatabase) {
+    if (req.params.id in urlDatabase[user]) {
+      longURL = urlDatabase[user][req.params.id];
+      res.redirect(longURL);
+    }
+  }
 });
 
 app.get("/urls/:id", (req, res) => {
