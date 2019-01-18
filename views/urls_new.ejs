@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head></head>
+  <head>
+    <% if(user_id){ %>
+      <h1>Welcome to TinyApp</h1>
+      <div><% include partials/_header %></div>
+    <% } %>
+  </head>
   <body style="font-size:20px; padding:50px;">
     <form action="/urls" method="POST" style="margin:150px;">
       <label for="longURL">Create a new shortened URL:</label>

@@ -108,7 +108,10 @@ app.post("/logout", (req, res) =>{
 });
 
 app.get("/", (req, res) => {
-  res.send("hello!");
+  if(!req.session.user_id){
+    res.redirect("/login");
+  }
+  res.redirect("/urls");
 });
 
 app.get("/urls", (req, res) => {
