@@ -127,7 +127,11 @@ app.post("/urls", (req, res) => {
   } else {
     const shortURL = generateRandomString();
     urlDatabase[req.session.user_id][shortURL] = req.body.longURL;
-    res.send(`<html><a href="http://localhost:8080/u/${shortURL}">http://localhost:8080/u/${shortURL}</a></html>`);
+    let templateVars = {
+        urls: urlDatabase,
+        user_id: req.session.user_id
+    };
+    res.render("urls_index", templateVars);
   }
 });
 
