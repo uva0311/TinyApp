@@ -8,7 +8,7 @@
 <body>
     <% if(user_id){ %>
       <% include urls_new  %>
-      <% for(let user_link = 0; user_link < Object.keys(urls[user_id]).length; user++){ %>
+      <% for(let user_link = 0; user_link < Object.keys(urls[user_id]).length; user_link++){ %>
         <ul>
             <p style="display: inline;">
                <a href="http://localhost:8080/u/<%= Object.keys(urls[user_id])[user_link] %>">http://localhost:8080/u/<%= Object.keys(urls[user_id])[user_link] %></a>
