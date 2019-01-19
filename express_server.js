@@ -47,27 +47,42 @@ function generateRandomString() {
   }
 
   return randomString;
-}
+};
+
+function validateLoginCredentials(email, password){
+  if(!(email.length) || !(password.length)){
+      return false;
+  }
+  return true;
+};
 
 app.get("/register", (req, res) => {
   res.render("urls_register");
 });
 
 app.post("/register", (req, res) => {
-  if(!(req.body.email.length) || !(req.body.password.length)){
-    res.status(400).send('invalid email address or password.');
-  } else if(Object.values(users).find((user) => user.email === req.body.email? true : false)) {
-    res.status(400).send('email address is already registered.');
+  const email = req.body.email;
+  const password = req.body.password;
+  const hasValidCredentials = validateLoginCredentials(email, password);
+  const findEmail = Object.values(users).map(
+    (user) => user.email).find(
+    (useremail) => useremail === email);
+
+  if(!hasValidCredentials){
+      res.status(403).send('invalid email address or password.');
+  } else if(findEmail){
+      res.status(400).send('email address is already registered.');
+      return;
   } else {
-    const id = generateRandomString();
-    users[id] = {
-      id: id,
-      email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 10)
-    };
-    urlDatabase[id] = {};
-    req.session.user_id = id;
-    res.redirect("/urls");
+      const id = generateRandomString();
+        users[id] = {
+        id: id,
+        email: email,
+        password: bcrypt.hashSync(password, 10)
+      };
+      urlDatabase[id] = {};
+      req.session.user_id = id;
+      res.redirect("/urls");
   }
 });
 
@@ -76,17 +91,21 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) =>{
-  password = req.body.password;
-  if(!(req.body.email.length) || !(req.body.password.length)){
+  const email = req.body.email;
+  const password = req.body.password;
+  const userInfo = Object.values(users);
+  const hasValidCredentials = validateLoginCredentials(email, password);
+
+  if(!hasValidCredentials){
     res.status(403).send("Please enter login information to login.");
   } else {
-    for(let user = 0; user < Object.values(users).length; user++){
-      if(Object.values(users)[user].email === req.body.email){
-        if(!bcrypt.compareSync(req.body.password, Object.values(users)[user].password)){
+    for(let user in userInfo){
+      if(userInfo[user].email === email){
+        if(!bcrypt.compareSync(password, userInfo[user].password)){
             res.status(403).send("password does not match.");
             return;
         } else {
-            user_id = Object.values(users)[user].id;
+            user_id = userInfo[user].id;
             req.session.user_id = user_id;
             res.redirect("/urls");
             return;
@@ -158,7 +177,10 @@ app.get("/urls/:id", (req, res) => {
   } else if(!req.params.id in urlDatabase[req.session.user_id]){
     res.status(403).send("This link belongs to another user.");
   } else {
-    let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.session.user_id][req.params.id]};
+    const templateVars = {
+      shortURL: req.params.id,
+      longURL: urlDatabase[req.session.user_id][req.params.id]
+    };
     res.render("urls_show", templateVars);
   }
 });
