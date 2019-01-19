@@ -37,7 +37,7 @@ const users = {
     password: bcrypt.hashSync("dishwasher-funk", 10)
   }
 };
-
+// generate a 6 characters long random string
 function generateRandomString() {
   const char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let randomString = "";
@@ -49,6 +49,7 @@ function generateRandomString() {
   return randomString;
 };
 
+// checks email or password length
 function validateLoginCredentials(email, password){
   if(!(email.length) || !(password.length)){
       return false;
@@ -70,12 +71,13 @@ app.post("/register", (req, res) => {
 
   if(!hasValidCredentials){
       res.status(403).send('invalid email address or password.');
+      return;
   } else if(findEmail){
       res.status(400).send('email address is already registered.');
       return;
   } else {
       const id = generateRandomString();
-        users[id] = {
+      users[id] = {
         id: id,
         email: email,
         password: bcrypt.hashSync(password, 10)
@@ -98,6 +100,7 @@ app.post("/login", (req, res) =>{
 
   if(!hasValidCredentials){
     res.status(403).send("Please enter login information to login.");
+    return;
   } else {
     for(let user in userInfo){
       if(userInfo[user].email === email){
@@ -108,11 +111,11 @@ app.post("/login", (req, res) =>{
             user_id = userInfo[user].id;
             req.session.user_id = user_id;
             res.redirect("/urls");
-            return;
         }
       }
     }
     res.status(403).send("email address is not registered yet.");
+    return;
   }
 });
 
@@ -124,6 +127,7 @@ app.post("/logout", (req, res) =>{
 app.get("/", (req, res) => {
   if(!req.session.user_id){
     res.redirect("/login");
+    return;
   }
   res.redirect("/urls");
 });
@@ -139,6 +143,7 @@ app.get("/urls", (req, res) => {
 app.post("/urls", (req, res) => {
   if(!req.session.user_id){
     res.status(403).send("Only registered user can visit this page.");
+    return;
   } else {
     const shortURL = generateRandomString();
     urlDatabase[req.session.user_id][shortURL] = req.body.longURL;
@@ -153,29 +158,30 @@ app.post("/urls", (req, res) => {
 app.get("/urls/new", (req, res) => {
   if(!req.session.user_id){
     res.redirect("/urls");
+    return;
   }
   res.render("urls_new");
 });
 
 app.get("/u/:id", (req, res) => {
   let longURL = "";
-  // missing req.params.id
-  console.log(urlDatabase[req.session.user_id]);
-  for (let user in urlDatabase) {
-    if (req.params.id in urlDatabase[req.session.user_id]) {
-      longURL = urlDatabase[user][req.params.id];
-      res.redirect(longURL);
-    } else {
-      res.status(404).send('Short URL does not exist');
-    }
+  if(req.params.id in urlDatabase[req.session.user_id]) {
+    longURL = urlDatabase[req.session.user_id][req.params.id];
+    res.redirect(longURL);
+    return;
+  } else {
+    res.status(404).send('Short URL does not exist');
+    return;
   }
 });
 
 app.get("/urls/:id", (req, res) => {
   if(!req.session.user_id){
     res.status(403).send("Only registered user can visit this page.");
+    return;
   } else if(!req.params.id in urlDatabase[req.session.user_id]){
     res.status(403).send("This link belongs to another user.");
+    return;
   } else {
     const templateVars = {
       shortURL: req.params.id,
