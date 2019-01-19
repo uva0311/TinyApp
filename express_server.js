@@ -159,7 +159,7 @@ app.get("/u/:id", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   if(!req.session.user_id){
     res.status(403).send("Only registered user can visit this page.");
-  } else if(urlDatabase[req.session.user_id][req.params.id] !== req.params.id){
+  } else if(!req.params.id in urlDatabase[req.session.user_id]){
     res.status(403).send("This link belongs to another user.");
   } else {
     let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.session.user_id][req.params.id]};
