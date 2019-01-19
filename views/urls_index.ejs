@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+    <h1>Welcome to TinyApp</h1>
     <% if(!user_id){ %>
-      <h1>Welcome to TinyApp</h1>
-      <h2>Please login/register to start use this service!</h2>
-      <div><% include partials/_header %></div>
+    <h2>Please login/register to start use this service!</h2>
+    <div><% include partials/_header %></div>
     <% } %>
 <body>
     <% if(user_id){ %>

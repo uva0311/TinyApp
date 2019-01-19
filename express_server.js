@@ -144,8 +144,10 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/u/:id", (req, res) => {
   let longURL = "";
+  // missing req.params.id
+  console.log(urlDatabase[req.session.user_id]);
   for (let user in urlDatabase) {
-    if (req.params.id in urlDatabase[user]) {
+    if (req.params.id in urlDatabase[req.session.user_id]) {
       longURL = urlDatabase[user][req.params.id];
       res.redirect(longURL);
     } else {
