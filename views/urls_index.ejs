@@ -8,13 +8,13 @@
 <body>
     <% if(user_id){ %>
       <% include urls_new  %>
-      <% for(let i = 0; i < Object.keys(urls[user_id]).length; i++){ %>
+      <% for(let user_link = 0; user_link < Object.keys(urls[user_id]).length; user++){ %>
         <ul>
             <p style="display: inline;">
-               <a href="http://localhost:8080/u/<%= Object.keys(urls[user_id])[i] %>">http://localhost:8080/u/<%= Object.keys(urls[user_id])[i] %></a>
-               ----> <%= Object.values(urls[user_id])[i] %>
-               <button style="display: inline;" onclick="window.location.href = '/urls/<%= Object.keys(urls[user_id])[i] %>';">Update</button>
-               <form method="POST" style="display: inline;" action="/urls/<%= Object.keys(urls[user_id])[i] %>?_method=DELETE">
+               <a href="http://localhost:8080/u/<%= Object.keys(urls[user_id])[user_link] %>">http://localhost:8080/u/<%= Object.keys(urls[user_id])[user_link] %></a>
+               ----> <%= Object.values(urls[user_id])[user_link] %>
+               <button style="display: inline;" onclick="window.location.href = '/urls/<%= Object.keys(urls[user_id])[user_link] %>';">Update</button>
+               <form method="POST" style="display: inline;" action="/urls/<%= Object.keys(urls[user_id])[user_link] %>?_method=DELETE">
                   <input type="submit" value="Delete">
                </form>
             </p>

@@ -7,10 +7,6 @@ const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 8080;
-const hash = (plaintext) => {
-  const salt = bcrypt.genSaltSync(10);
-  return bcrypt.hashSync(plaintext, salt);
-};
 
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -46,7 +42,7 @@ function generateRandomString() {
   const char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let randomString = "";
 
-  for(let i = 0; i < 6; i++){
+  for(let stringLength = 0; stringLength < 6; stringLength++){
     randomString += char.charAt(Math.floor(Math.random() * char.length));
   }
 
@@ -84,13 +80,13 @@ app.post("/login", (req, res) =>{
   if(!(req.body.email.length) || !(req.body.password.length)){
     res.status(403).send("Please enter login information to login.");
   } else {
-    for(let i = 0; i < Object.values(users).length; i++){
-      if(Object.values(users)[i].email === req.body.email){
-        if(!bcrypt.compareSync(req.body.password, Object.values(users)[i].password)){
+    for(let user = 0; user < Object.values(users).length; user++){
+      if(Object.values(users)[user].email === req.body.email){
+        if(!bcrypt.compareSync(req.body.password, Object.values(users)[user].password)){
             res.status(403).send("password does not match.");
             return;
         } else {
-            user_id = Object.values(users)[i].id;
+            user_id = Object.values(users)[user].id;
             req.session.user_id = user_id;
             res.redirect("/urls");
             return;
@@ -114,7 +110,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = {
+  const templateVars = {
       urls: urlDatabase,
       user_id: req.session.user_id
   };
@@ -127,7 +123,7 @@ app.post("/urls", (req, res) => {
   } else {
     const shortURL = generateRandomString();
     urlDatabase[req.session.user_id][shortURL] = req.body.longURL;
-    let templateVars = {
+    const templateVars = {
         urls: urlDatabase,
         user_id: req.session.user_id
     };
